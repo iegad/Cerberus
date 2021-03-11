@@ -1,0 +1,10 @@
+server:
+  host: ":8080"
+  protocol: "tcp"
+  maxConn: 100
+  timeout: 30
+
+consul:
+  host: "192.168.8.234:8500"
+  service: "tcp-gw"
+  id: "tcp-gw-21"
