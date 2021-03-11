@@ -8,6 +8,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+var Instance *Config
+
 type consul struct {
 	Host    string `json:"host"    yaml:"host"`
 	Service string `json:"service" yaml:"service"`
@@ -31,29 +33,29 @@ func (this_ *Config) String() string {
 	return string(data)
 }
 
-func New(fname string) (*Config, error) {
+func Init(fname string) error {
 	data, err := os.ReadFile(fname)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	this_ := &Config{}
-	err = yaml.Unmarshal(data, this_)
+	Instance = &Config{}
+	err = yaml.Unmarshal(data, Instance)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if len(this_.Server.Host) == 0 {
-		return nil, errors.New("config.server.host is invalid")
+	if len(Instance.Server.Host) == 0 {
+		return errors.New("config.server.host is invalid")
 	}
 
-	if this_.Server.MaxConn <= 0 {
-		return nil, errors.New("config.server.maxConn is invalid")
+	if Instance.Server.MaxConn <= 0 {
+		return errors.New("config.server.maxConn is invalid")
 	}
 
-	if this_.Server.Timeout <= 0 {
-		return nil, errors.New("config.server.timeout is invalid")
+	if Instance.Server.Timeout <= 0 {
+		return errors.New("config.server.timeout is invalid")
 	}
 
-	return this_, nil
+	return nil
 }
